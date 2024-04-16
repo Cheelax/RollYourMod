@@ -10,21 +10,12 @@ import colors from "./theme/colors";
 import * as Components from "./theme/components";
 import breakpoints from "./theme/breakpoints";
 
-// 2. Call `extendTheme` and pass your custom values
 const theme = extendTheme({
   fonts: {
     body: "Chicago FLF, ui-sans-serif, system-ui",
     heading: "Chicago FLF, ui-sans-serif, system-ui",
   },
   colors,
-  // styles: {
-  //   global: {
-  //     "html, body": {
-  //       color: "green", // Use the color key defined in the theme
-  //       backgroundColor: "neon.900", // Use the color key defined in the theme
-  //     },
-  //   },
-  // },
   styles,
   textStyles,
   layerStyles,
