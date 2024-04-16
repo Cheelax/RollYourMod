@@ -1,4 +1,16 @@
-use ryo_pvp::models::{hustler::Drugs};
+use starknet::{ContractAddress};
+use ryo_pvp::models::{drugs::Drugs};
+
+#[derive(Model, Copy, Drop, Serde)]
+struct TwoPlayerGame {
+    #[key]
+    game_id: u128,
+    player_a: ContractAddress,
+    player_b: ContractAddress,
+    hustler_a: u128,
+    hustler_b: u128,
+}
+
 
 #[derive(Model, Copy, Drop, Serde)]
 struct Move {
