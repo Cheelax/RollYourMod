@@ -32,7 +32,9 @@ function App() {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
-      <DrugInventoryInfo />
+      <div className="fixed bottom-0 right-0 w-1/4 h-1/10 overflow-auto">
+        <DrugInventoryInfo />
+      </div>
     </>
   );
 }
