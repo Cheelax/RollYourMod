@@ -14,7 +14,7 @@ export function generatePixelBorderPath(radius = 4, pixelSize = 4) {
   return generatePath(flipped);
 }
 
-function generateInnerPath(
+export function generateInnerPath(
   radius: number,
   pixelSize: number,
   offset: number,
