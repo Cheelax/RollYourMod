@@ -4,6 +4,7 @@ import viteLogo from "/vite.svg";
 import "./index.css";
 import "./theme/fonts.css";
 import Button from "./components/Button";
+import DrugInventoryInfo from "./components/DrugInventoryInfo";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -31,6 +32,7 @@ function App() {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
+      <DrugInventoryInfo />
     </>
   );
 }
