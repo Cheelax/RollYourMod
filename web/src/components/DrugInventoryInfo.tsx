@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { VStack, HStack, Text, Grid, Box, Card } from "@chakra-ui/react";
+import { VStack, HStack, Text, Card } from "@chakra-ui/react";
 import colors from "../theme/colors";
 import { BorderImage } from "./icons/BorderImage";
 

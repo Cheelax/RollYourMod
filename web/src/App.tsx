@@ -5,9 +5,28 @@ import "./index.css";
 import "./theme/fonts.css";
 import Button from "./components/Button";
 import DrugInventoryInfo from "./components/DrugInventoryInfo";
+import CharacterStats from "./components/CharacterStats";
 
 function App() {
   const [count, setCount] = useState(0);
+
+  const weapon = {
+    name: "Longsword",
+    range: 5,
+  };
+
+  // Example character data
+  const characterData = {
+    name: "Aragorn",
+    str: 7,
+    bonusStr: 2,
+    speed: 5,
+    bonusSpeed: 1,
+    defense: 8,
+    bonusDefense: 3,
+    weapon: weapon,
+    drugCount: 10,
+  };
 
   return (
     <>
@@ -32,6 +51,9 @@ function App() {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
+      <div className="fixed right-0 top-0 h-full w-1/10 overflow-auto">
+        <CharacterStats characterData={characterData} />
+      </div>
       <div className="fixed bottom-0 right-0 w-1/4 h-1/10 overflow-auto">
         <DrugInventoryInfo />
       </div>
