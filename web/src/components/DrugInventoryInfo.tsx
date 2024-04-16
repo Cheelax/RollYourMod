@@ -20,23 +20,28 @@ const DrugInventoryInfo = () => {
   const [drugComponents, setDrugComponents] = useState<React.ReactNode[]>([]);
 
   useEffect(() => {
-    const imports = sampleDrugs.map(async (drug) => {
-      try {
-        console.log("Importing drug icon component for", drug.name);
-        const IconComponent = (await import(`./icons/Drugs/${drug.name}`))
-          .default;
-        console.log("Imported drug icon component for", IconComponent);
-        return <IconComponent key={drug.name} boxSize="24px" />;
-      } catch (error) {
-        console.error(
-          `Could not load drug icon component for ${drug.name}`,
-          error
-        );
-        return <Text key={drug.name}>Icon not found</Text>;
-      }
-    });
+    const loadComponents = async () => {
+      const imports = sampleDrugs.map(async (drug) => {
+        try {
+          // Assuming the component name matches the drug name exactly
+          const IconComponent = (await import(`./icons/Drugs/${drug.name}`))[
+            drug.name
+          ];
+          return <IconComponent key={drug.name} boxSize="24px" />;
+        } catch (error) {
+          console.error(
+            `Could not load drug icon component for ${drug.name}`,
+            error
+          );
+          return <Text key={drug.name}>Icon not found</Text>;
+        }
+      });
 
-    Promise.all(imports).then(setDrugComponents);
+      const loadedComponents = await Promise.all(imports);
+      setDrugComponents(loadedComponents);
+    };
+
+    loadComponents();
   }, []);
 
   return (
@@ -59,12 +64,12 @@ const DrugInventoryInfo = () => {
           p={2}
           border="2px"
           borderColor="neon.900"
-          bg="neon.200"
+          bg="neon.500"
         >
           {drugComponents.map((Component, index) => (
             <React.Fragment key={`drug-${index}`}>
               {Component}
-              <Text>Quantity: {sampleDrugs[index].quantity}</Text>
+              <Text className="color-black">{sampleDrugs[index].quantity}</Text>
             </React.Fragment>
           ))}
         </HStack>
