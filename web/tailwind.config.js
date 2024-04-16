@@ -7,10 +7,11 @@ export default {
         sans: ["Chicago FLF", "ui-sans-serif", "system-ui"],
       },
       colors: {
-        green: "#00ff00", // Remplacez cette valeur par la teinte exacte de vert que vous voulez.
+        green: "#00ff00",
+        custom_green: "#172217",
       },
       textColor: {
-        DEFAULT: "#00ff00", // Utilisez le même vert ici pour la couleur de texte par défaut.
+        DEFAULT: "#00ff00",
       },
     },
   },
