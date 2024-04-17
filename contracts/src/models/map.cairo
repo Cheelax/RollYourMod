@@ -24,6 +24,17 @@ impl Vec2Impl of Vec2Trait {
     }
 }
 
+
+impl Vec2PartialEqImpl of PartialEq<Vec2> {
+    fn eq(lhs: @Vec2, rhs: @Vec2) -> bool {
+        lhs.x == rhs.x && lhs.y == rhs.y
+    }
+    fn ne(lhs: @Vec2, rhs: @Vec2) -> bool {
+        !(lhs == rhs)
+    }
+}
+
+
 fn get_start_position(player: AB) -> Vec2 {
     match player {
         AB::A => Vec2 { x: 0, y: 0 },
