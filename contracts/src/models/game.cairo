@@ -19,7 +19,7 @@ struct Move {
     hustler_id: u128,
     position: Vec2,
     drugs: Drugs,
-    attack: bool,
+    attack: Vec2,
     revealed: bool,
 }
 
