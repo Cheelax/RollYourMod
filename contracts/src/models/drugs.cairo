@@ -6,6 +6,12 @@ struct Drugs {
     speed: u32,
 }
 
+#[generate_trait]
+impl DrugsImpl of DrugsTrait {
+    fn total(self: Drugs) -> u32 {
+        return self.shrooms + self.cocaine + self.ketamine + self.speed;
+    }
+}
 
 impl DrugsZero of Zeroable<Drugs> {
     fn zero() -> Drugs {

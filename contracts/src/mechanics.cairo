@@ -2,7 +2,7 @@ use core::num::traits::zero::Zero;
 use ryo_pvp::{
     models::{
         hustler::{Hustler, HustlerState, TwoHustlers, TwoHustlersState, get_stats, Stats},
-        game::{Move, TwoMoves}, map::{Vec2}
+        game::{Move, TwoMoves}, map::{Vec2}, drugs::DrugsTrait,
     },
 };
 
@@ -26,15 +26,61 @@ fn run_round(hustlers: TwoHustlers, states: TwoHustlersState, moves: TwoMoves) -
             }
         }
     }
+    let a_attacked = match a_type {
+        MoveType::Attack => check_attack(hustlers.a, hustlers.b, moves.a, b_state.position),
+        _ => false
+    };
+    let b_attacked = match b_type {
+        MoveType::Attack => check_attack(hustlers.b, hustlers.a, moves.b, a_state.position),
+        _ => false
+    };
+    if a_attacked && b_attacked {
+        let a_defence = get_defence(hustlers.a, states.a);
+        let b_defence = get_defence(hustlers.b, states.b);
+        if a_defence > b_defence {
+            b_state.health = 0;
+        } else if a_defence < b_defence {
+            a_state.health = 0;
+        } else {
+            if states.a.system.total() > states.b.system.total() {
+                b_state.health = 0;
+            } else {
+                a_state.health = 0;
+            }
+        }
+    } else if a_attacked {
+        b_state.health = 0;
+    } else if b_attacked {
+        a_state.health = 0;
+    }
+
+    TwoHustlersState { a: a_state, b: b_state, }
 }
 
-fn check_attack(hustler_a: Hustler, hustler_d: Hustler, attack: Vec2, d_position: Vec2) -> bool {
+fn check_attack(hustler_a: Hustler, hustler_d: Hustler, a_move: Move, d_position: Vec2) -> bool {
     match hustler_a.items.weapon {
-        0 | 1 => { attack == d_position },
+        0 | 1 => { a_move.attack == d_position },
         2 => {
-            let dpx: i32 = attack.x.try_into().unwrap() - d_position.x.try_into().unwrap();
-            let dpy: i32 = attack.y.try_into().unwrap() - d_position.y.try_into().unwrap();
-        }
+            let dpx: i32 = a_move.position.x.try_into().unwrap() - d_position.x.try_into().unwrap();
+            let dpy: i32 = a_move.position.y.try_into().unwrap() - d_position.y.try_into().unwrap();
+
+            let apx: i32 = a_move.position.x.try_into().unwrap()
+                - a_move.attack.x.try_into().unwrap();
+            let apy: i32 = a_move.position.y.try_into().unwrap()
+                - a_move.attack.y.try_into().unwrap();
+            if apx > 0 {
+                dpy == 0 && dpx > 0
+            } else if apx < 0 {
+                dpy == 0 && dpx < 0
+            } else if apy > 0 {
+                dpx == 0 && dpy < 0
+            } else if apy < 0 {
+                dpx == 0 && dpy > 0
+            } else {
+                false
+            }
+        },
+        _ => panic!("Weapon id not found")
     }
 }
 
@@ -61,6 +107,14 @@ fn get_hustler_new_state(
 
 fn get_speed(hustler: Hustler, state: HustlerState) -> u8 {
     hustler.items.shoes + if state.system.speed > 0 {
+        1
+    } else {
+        0
+    }
+}
+
+fn get_defence(hustler: Hustler, state: HustlerState) -> u8 {
+    hustler.items.clothes + if state.system.ketamine > 0 {
         1
     } else {
         0

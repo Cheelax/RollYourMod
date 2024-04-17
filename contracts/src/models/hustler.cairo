@@ -69,7 +69,7 @@ impl HustlerStateImpl of HustlerStateTrait {
 }
 
 impl HustlerHashImpl of HashTrait<Hustler> {
-    fn get_hash(self: Hustler, salt: felt252) -> felt252 {
+    fn hash(self: Hustler, salt: felt252) -> felt252 {
         '12'
     }
 }

@@ -24,7 +24,7 @@ struct Move {
 }
 
 impl MoveHashImpl of HashTrait<Move> {
-    fn get_hash(self: Move, salt: felt252) -> felt252 {
+    fn hash(self: Move, salt: felt252) -> felt252 {
         '12'
     }
 }
