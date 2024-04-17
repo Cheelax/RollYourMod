@@ -7,16 +7,6 @@ struct Drugs {
 }
 
 
-#[derive(Model, Copy, Drop, Serde)]
-struct DrugConsumption {
-    #[key]
-    game_id: u128,
-    #[key]
-    hustler_id: u128,
-    drugs: Drugs,
-}
-
-
 impl DrugsZero of Zeroable<Drugs> {
     fn zero() -> Drugs {
         Drugs { shrooms: 0, cocaine: 0, ketamine: 0, speed: 0, }

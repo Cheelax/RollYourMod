@@ -14,4 +14,5 @@ mod models {
 mod systems {
     mod game;
 }
+mod mechanics;
 
