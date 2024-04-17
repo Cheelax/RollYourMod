@@ -1,5 +1,5 @@
 use starknet::{ContractAddress};
-use ryo_pvp::{models::{hustler::{Hustler, Drugs}, game::{Move}},};
+use ryo_pvp::{models::{hustler::{Hustler, Drugs}, game::{Move}}};
 
 #[starknet::interface]
 trait IGameActions<TContractState> {
@@ -32,18 +32,22 @@ mod game_actions {
         fn commit_hustler(self: @ContractState, game_id: u128, hustler_id: u128, hash: felt252) {
             let world: World = self.world_dispatcher.read();
             let game = world.create(game_id);
+            GameTrait::commit_hustler(game, hustler_id, hash);
         }
         fn reveal_hustler(self: @ContractState, game_id: u128, hustler: Hustler, salt: felt252) {
             let world: World = self.world_dispatcher.read();
             let game = world.create(game_id);
+            GameTrait::reveal_hustler(game, hustler, salt);
         }
         fn commit_move(self: @ContractState, game_id: u128, hustler_id: u128, hash: felt252) {
             let world: World = self.world_dispatcher.read();
             let game = world.create(game_id);
+            GameTrait::commit_move(game, hustler_id, hash);
         }
         fn reveal_move(self: @ContractState, game_id: u128, move: Move, salt: felt252) {
             let world: World = self.world_dispatcher.read();
             let game = world.create(game_id);
+            GameTrait::reveal_move(game, move, salt);
         }
         fn reveal_drugs(
             self: @ContractState, game_id: u128, hustler_id: u128, drugs: Drugs, salt: felt252

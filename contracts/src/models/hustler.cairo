@@ -15,6 +15,33 @@ struct Hustler {
     revealed: bool,
 }
 
+
+struct Stats {
+    attack: u8,
+    defence: u8,
+    speed: u8,
+}
+
+fn get_stats(hustler: Hustler, state: HustlerState) -> Stats {
+    Stats {
+        attack: hustler.items.weapon + if state.system.cocaine == 0 {
+            0
+        } else {
+            1
+        },
+        defence: hustler.items.clothes + if state.system.ketamine == 0 {
+            0
+        } else {
+            1
+        },
+        speed: hustler.items.shoes + if state.system.speed == 0 {
+            0
+        } else {
+            1
+        },
+    }
+}
+
 #[derive(Model, Copy, Drop, Serde)]
 struct HustlerState {
     #[key]
@@ -42,7 +69,7 @@ impl HustlerStateImpl of HustlerStateTrait {
 }
 
 impl HustlerHashImpl of HashTrait<Hustler> {
-    fn get_hash(self: Hustler, salt: felt252) -> felt252 {
+    fn hash(self: Hustler, salt: felt252) -> felt252 {
         '12'
     }
 }

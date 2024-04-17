@@ -146,7 +146,7 @@ impl GameImpl of GameTrait {
         let hustlers = self.get_hustlers();
         // commits.is_non_zero()
         assert(hustlers.has_init(hustler.hustler_id), 'All ready revealed');
-        assert(hustler.get_hash(salt) == commit.hash, 'Hash does not match');
+        assert(hustler.hash(salt) == commit.hash, 'Hash dose not match');
         set!(self.world, (hustler,));
         emit!(self.world, HustlerRevealed { hustler });
 
@@ -166,7 +166,7 @@ impl GameImpl of GameTrait {
         let mut moves = self.get_moves();
 
         assert(!(moves.has_init(move.hustler_id)), 'All ready revealed');
-        assert(move.get_hash(salt) == commit.hash, 'Hash does not match');
+        assert(move.hash(salt) == commit.hash, 'Hash dose not match');
 
         let mut other_move = self.get_move(self.get_other_hustler_id(move.hustler_id));
         if other_move.revealed {
