@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import {
   Button,
@@ -6,8 +7,10 @@ import {
 import DrugInventoryInfo from './components/DrugInventoryInfo';
 import CharacterStats from './components/CharacterStats';
 import { Map } from './components/Map';
+import { PlayerComponent } from "./components/PlayerSprite";
 import { Acid, Cocaine, Heroin, Speed, Weed } from './components/icons/Drugs';
 import { DrugModal } from './components/DrugModal';
+
 
 function App() {
   const weapon = {
@@ -48,7 +51,11 @@ function App() {
     <div className="flex flex-col h-screen m-4">
       <div className="flex flex-1 min-h-0">
         <div className="flex-grow relative p-2 bg-opacity-50">
-          <Map width={10} height={10} />
+          {/*  this is in the coord size not png size */}
+          <Map width={10} height={10}>
+          </Map>
+          
+          <PlayerComponent width={10} height={10} />  
         </div>
         <div className="w-1/4 min-w-min overflow-auto p-2 bg-opacity-50">
           <CharacterStats characterData={characterData} />

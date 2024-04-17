@@ -1,12 +1,16 @@
 /* Assuming you're using a separate CSS file like Map.css */
 .map {
   display: grid;
+  
+  background-image: url('map.png');
 }
 
 .tile {
-  background-color: #d60000; /* Light grey background so it's visible */
-  border: 1px solid #aaa; /* Slightly darker border for visibility */
-  width: 30px; /* Define a specific width for the tiles */
-  height: 30px; /* Define a specific height for the tiles */
+  /* background-color: #d60000; Light grey background so it's visible */
+  border: 1px solid #aaa; 
+  /* Slightly darker border for visibility */
+  width: 105px; /* Define a specific width for the tiles */
+  height: 105px; /* Define a specific height for the tiles */
   cursor: pointer;
+  /* add the image to the div */
 }
