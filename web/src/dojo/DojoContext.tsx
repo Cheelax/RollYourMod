@@ -1,7 +1,7 @@
 import { BurnerAccount, useBurnerManager } from "@dojoengine/create-burner";
-import { ReactNode, createContext, useContext, useMemo } from "react";
+import { createContext, ReactNode, useContext, useMemo } from "react";
 import { Account } from "starknet";
-import { SetupResult } from "./generated/setup";
+import { SetupResult } from "./setup";
 
 interface DojoContextType extends SetupResult {
   masterAccount: Account;
@@ -10,13 +10,12 @@ interface DojoContextType extends SetupResult {
 
 export const DojoContext = createContext<DojoContextType | null>(null);
 
-export const DojoProvider = ({
-  children,
-  value,
-}: {
+type Props = {
   children: ReactNode;
   value: SetupResult;
-}) => {
+};
+
+export const DojoProvider = ({ children, value }: Props) => {
   const currentValue = useContext(DojoContext);
   if (currentValue) throw new Error("DojoProvider can only be used once");
 
@@ -36,11 +35,11 @@ export const DojoProvider = ({
     create,
     list,
     get,
-    select,
-    clear,
     account,
-    isDeploying,
     count,
+    select,
+    isDeploying,
+    clear,
     copyToClipboard,
     applyFromClipboard,
   } = useBurnerManager({
@@ -54,13 +53,13 @@ export const DojoProvider = ({
         masterAccount,
         account: {
           create,
+          count,
           list,
           get,
           select,
           clear,
           account: account ? account : masterAccount,
           isDeploying,
-          count,
           copyToClipboard,
           applyFromClipboard,
         },

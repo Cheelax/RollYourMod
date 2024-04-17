@@ -4,13 +4,35 @@ import DrugInventoryInfo from "./components/DrugInventoryInfo";
 import CharacterStats from "./components/CharacterStats";
 import { Map } from "./components/Map";
 import Button from "./components/Button";
+import { useDojo } from "./dojo/useDojo";
+import { useEffect } from "react";
 
 function App() {
+  const {
+    setup: {
+      client: { game_actions },
+    },
+    account: { account },
+  } = useDojo();
   const weapon = {
     name: "Longsword",
     range: 5,
   };
 
+  useEffect(() => {
+    const initializeGame = async () => {
+      try {
+        await game_actions.create(
+          account,
+          "0x066663598D1120F97aaD74bCCC0c162f89F12b8A3fA444F6cAAcb6BccC500600"
+        );
+      } catch (error) {
+        console.error("Error initializing game:", error);
+      }
+    };
+
+    initializeGame();
+  }, [game_actions, account]);
   // Example character data
   const characterData = {
     name: "Aragorn",

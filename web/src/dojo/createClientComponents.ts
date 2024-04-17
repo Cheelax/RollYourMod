@@ -11,7 +11,10 @@ export function createClientComponents({
   return {
     ...contractComponents,
     //add components like above
-    // Position: overridableComponent(contractComponents.Position),
-    // Moves: overridableComponent(contractComponents.Moves),
+    CommitHash: overridableComponent(contractComponents.CommitHash),
+    Hustler: overridableComponent(contractComponents.Hustler),
+    HustlerState: overridableComponent(contractComponents.HustlerState),
+    Move: overridableComponent(contractComponents.Move),
+    TwoPlayerGame: overridableComponent(contractComponents.TwoPlayerGame),
   };
 }
