@@ -12,6 +12,24 @@ use ryo_pvp::{
 
 type World = IWorldDispatcher;
 
+#[event]
+#[derive(Drop, starknet::Event)]
+enum Event {
+    PlayersMoved: PlayersMoved,
+    HustlerRevealed: HustlerRevealed,
+}
+
+#[derive(Drop, Serde, starknet::Event)]
+struct PlayersMoved {
+    a: Move,
+    b: Move,
+}
+
+#[derive(Drop, Serde, starknet::Event)]
+struct HustlerRevealed {
+    hustler: Hustler,
+}
+
 #[derive(Copy, Drop, Print)]
 struct Game {
     world: World,
@@ -130,6 +148,7 @@ impl GameImpl of GameTrait {
         assert(hustlers.has_init(hustler.hustler_id), 'All ready revealed');
         assert(hustler.hash(salt) == commit.hash, 'Hash dose not match');
         set!(self.world, (hustler,));
+        emit!(self.world, HustlerRevealed { hustler });
 
         if hustlers.has_init(self.get_other_hustler_id(hustler.hustler_id)) {
             self.reset_hashes();
@@ -156,6 +175,7 @@ impl GameImpl of GameTrait {
             let states = run_round(self.get_hustlers(), self.get_states(), moves);
             other_move.revealed = false;
             set!(self.world, (other_move, states.a, states.b));
+            emit!(self.world, PlayersMoved { a: moves.a, b: moves.b });
             self.reset_hashes();
         } else {
             set!(self.world, (move,));
