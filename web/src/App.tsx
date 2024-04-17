@@ -1,25 +1,13 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  ModalFooter,
   Button,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
-  NumberIncrementStepper,
-  NumberDecrementStepper,
-  useDisclosure,
-  Box
+  useDisclosure
 } from '@chakra-ui/react';
 import DrugInventoryInfo from './components/DrugInventoryInfo';
 import CharacterStats from './components/CharacterStats';
 import { Map } from './components/Map';
 import { Acid, Cocaine, Heroin, Speed, Weed } from './components/icons/Drugs';
+import { DrugModal } from './components/DrugModal';
 
 function App() {
   const weapon = {
@@ -75,43 +63,12 @@ function App() {
       </div>
 
       {/* Modal */}
-      <Modal isOpen={isOpen} onClose={onClose} isCentered>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Choose Your Dosage</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-          {drugs.map(drug => (
-              <Box key={drug.id} p={2} className='flex align-center'>
-                <drug.icon />
-                <NumberInput
-                  size="sm"
-                  defaultValue={0}
-                  min={0}
-                  max={10}
-                  onChange={(valueAsString, valueAsNumber) =>
-                    handleQuantityChange(valueAsString, valueAsNumber, drug.id)
-                  }
-                >
-                  <NumberInputField />
-                  <NumberInputStepper>
-                    <NumberIncrementStepper />
-                    <NumberDecrementStepper />
-                  </NumberInputStepper>
-                </NumberInput>
-              </Box>
-            ))}
-          </ModalBody>
-          <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={onClose}>
-              Close
-            </Button>
-            <Button variant="ghost" onClick={() => console.log(drugs)}>
-              Confirm
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+      <DrugModal
+        isOpen={isOpen}
+        onClose={onClose}
+        drugs={drugs}
+        handleQuantityChange={handleQuantityChange}
+      />
     </div>
   );
 }
