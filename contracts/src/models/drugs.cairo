@@ -25,12 +25,34 @@ impl DrugsZero of Zeroable<Drugs> {
     }
 }
 
+impl U32IntoDrugs of Into<u32, Drugs> {
+    fn into(self: u32) -> Drugs {
+        Drugs { shrooms: self, cocaine: self, ketamine: self, speed: self, }
+    }
+}
+
 impl DrugsSubEq of SubEq<Drugs> {
     fn sub_eq(ref self: Drugs, other: Drugs) {
-        self.shrooms -= other.shrooms;
-        self.cocaine -= other.cocaine;
-        self.ketamine -= other.ketamine;
-        self.speed -= other.speed;
+        if other.shrooms > self.shrooms {
+            self.shrooms = 0;
+        } else {
+            self.shrooms -= other.shrooms;
+        }
+        if other.cocaine > self.cocaine {
+            self.cocaine = 0;
+        } else {
+            self.cocaine -= other.cocaine;
+        }
+        if other.ketamine > self.ketamine {
+            self.ketamine = 0;
+        } else {
+            self.ketamine -= other.ketamine;
+        }
+        if other.speed > self.speed {
+            self.speed = 0;
+        } else {
+            self.speed -= other.speed;
+        }
     }
 }
 
