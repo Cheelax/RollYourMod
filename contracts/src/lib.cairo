@@ -7,6 +7,8 @@ mod models {
     mod game;
     mod utils;
     mod drugs;
+    mod map;
+    mod commits;
 }
 
 mod systems {

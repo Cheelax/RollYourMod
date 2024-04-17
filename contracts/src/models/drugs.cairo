@@ -7,6 +7,34 @@ struct Drugs {
 }
 
 
+#[derive(Model, Copy, Drop, Serde)]
+struct DrugConsumption {
+    #[key]
+    game_id: u128,
+    #[key]
+    hustler_id: u128,
+    drugs: Drugs,
+}
+
+
+impl DrugsZero of Zeroable<Drugs> {
+    fn zero() -> Drugs {
+        Drugs { shrooms: 0, cocaine: 0, ketamine: 0, speed: 0, }
+    }
+    fn is_zero(self: Drugs) -> bool {
+        self.shrooms.is_zero()
+            && self.cocaine.is_zero()
+            && self.ketamine.is_zero()
+            && self.speed.is_zero()
+    }
+    fn is_non_zero(self: Drugs) -> bool {
+        self.shrooms.is_non_zero()
+            && self.cocaine.is_non_zero()
+            && self.ketamine.is_non_zero()
+            && self.speed.is_non_zero()
+    }
+}
+
 impl DrugsSubEq of SubEq<Drugs> {
     fn sub_eq(ref self: Drugs, other: Drugs) {
         self.shrooms -= other.shrooms;

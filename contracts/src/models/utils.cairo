@@ -1,8 +1,28 @@
-#[derive(Model, Copy, Drop, Print, Serde, SerdeLen)]
-struct CommitHash {
-    #[key]
-    game_id: u128,
-    #[key]
-    player_id: u128,
-    hash: felt252,
+trait TwoZero<T> {
+    fn is_zero(self: T) -> bool;
+    fn is_non_zero(self: T) -> bool;
+}
+
+#[derive(Copy, Drop, Print, Serde, PartialEq)]
+enum AB {
+    A,
+    B,
+}
+
+
+impl BitNotAB of BitNot<AB> {
+    fn bitnot(a: AB) -> AB {
+        match a {
+            AB::A => AB::B,
+            AB::B => AB::A,
+        }
+    }
+}
+impl NotAB of Not<AB> {
+    fn not(a: AB) -> AB {
+        match a {
+            AB::A => AB::B,
+            AB::B => AB::A,
+        }
+    }
 }
