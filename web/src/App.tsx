@@ -1,7 +1,7 @@
-import React from "react";
 import DrugInventoryInfo from "./components/DrugInventoryInfo";
 import CharacterStats from "./components/CharacterStats";
 import { Map } from "./components/Map";
+import { PlayerComponent } from "./components/PlayerSprite";
 import Button from "./components/Button";
 
 function App() {
@@ -27,7 +27,11 @@ function App() {
       <div className="flex flex-1 min-h-0">
         {/* Map takes the majority of the screen */}
         <div className="flex-grow relative p-2 bg-opacity-50">
-          <Map width={10} height={10} />
+          {/*  this is in the coord size not png size */}
+          <Map width={10} height={10}>
+          </Map>
+          
+          <PlayerComponent width={10} height={10} />  
         </div>
         {/* Sidebar for character stats */}
         <div className="w-1/4 min-w-min overflow-auto p-2 bg-opacity-50">
