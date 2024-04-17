@@ -1,15 +1,10 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
 import "./index.css";
 import "./theme/fonts.css";
-import Button from "./components/Button";
 import DrugInventoryInfo from "./components/DrugInventoryInfo";
 import CharacterStats from "./components/CharacterStats";
+import { Map } from "./components/Map";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   const weapon = {
     name: "Longsword",
     range: 5,
@@ -31,26 +26,8 @@ function App() {
   return (
     <>
       <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        <Map width={10} height={10}></Map>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <Button> Click me</Button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
       <div className="fixed right-0 top-0 h-full w-1/10 overflow-auto">
         <CharacterStats characterData={characterData} />
       </div>
