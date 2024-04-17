@@ -30,3 +30,4 @@ fn get_start_position(player: AB) -> Vec2 {
         AB::B => Vec2 { x: 10, y: 10 },
     }
 }
+

@@ -31,6 +31,6 @@ trait TwoTrait<T, S> {
     fn create(a: S, b: S) -> T;
     fn has_init(self: T, hustler_id: u128) -> bool;
     fn both_init(self: T) -> bool;
-    fn get<U>(self: T, hustler_id: u128) -> U;
+    fn get(self: T, hustler_id: u128) -> S;
     fn set(ref self: T, obj: S);
 }
