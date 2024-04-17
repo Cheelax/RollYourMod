@@ -1,8 +1,10 @@
+use core::traits::Into;
 use starknet::ContractAddress;
 use ryo_pvp::models::{
     utils::{AB, TwoTrait}, game::{Drugs}, map::{get_start_position, Vec2}, commits::HashTrait,
     hustler_items::HustlerItems,
 };
+use core::pedersen::pedersen;
 
 #[derive(Model, Copy, Drop, Serde)]
 struct Hustler {
@@ -42,8 +44,12 @@ impl HustlerStateImpl of HustlerStateTrait {
 }
 
 impl HustlerHashImpl of HashTrait<Hustler> {
-    fn get_hash(self: Hustler, salt: felt252) -> felt252 {
-        '12'
+    fn hash(self: Hustler, salt: felt252) -> felt252 {
+        let base_pedersen = pedersen(self.items.weapon.into(), self.items.clothes.into());
+        let shoe_pedersen = pedersen(base_pedersen, self.items.shoes.into());
+        let bag_pedersen = pedersen(shoe_pedersen, self.items.bag.into());
+        let final_pedersen = pedersen(bag_pedersen, self.drugs.into());
+        pedersen(salt.into(), final_pedersen.into());
     }
 }
 

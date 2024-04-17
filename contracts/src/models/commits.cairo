@@ -11,7 +11,7 @@ struct CommitHash {
 }
 
 trait HashTrait<T> {
-    fn get_hash(self: T, salt: felt252) -> felt252;
+    fn hash(self: T, salt: felt252) -> felt252;
 }
 
 #[derive(Copy, Drop, Print)]
