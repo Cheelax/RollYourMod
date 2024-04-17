@@ -1,33 +1,44 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
 import "./index.css";
+import "./theme/fonts.css";
+import DrugInventoryInfo from "./components/DrugInventoryInfo";
+import CharacterStats from "./components/CharacterStats";
+import { Map } from "./components/Map";
+import Button from "./components/Button";
 
 function App() {
-  const [count, setCount] = useState(0);
+  const weapon = {
+    name: "Longsword",
+    range: 5,
+  };
+
+  // Example character data
+  const characterData = {
+    name: "Aragorn",
+    str: 7,
+    bonusStr: 2,
+    speed: 5,
+    bonusSpeed: 1,
+    defense: 8,
+    bonusDefense: 3,
+    weapon: weapon,
+    drugCount: 10,
+  };
 
   return (
     <>
       <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        <Map width={10} height={10}></Map>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
+      <div className="fixed right-0 top-0 h-full w-1/10 overflow-auto">
+        <CharacterStats characterData={characterData} />
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <div className="fixed bottom-0 w-full flex justify-around items-center px-4 py-2">
+        <Button onClick={() => console.log("attack")}>Attack</Button>
+        <Button onClick={() => console.log("take drugs")}>Take Drugs</Button>
+        <div className="flex-1 w-1/4 h-1/10 overflow-auto">
+          <DrugInventoryInfo />
+        </div>
+      </div>
     </>
   );
 }
