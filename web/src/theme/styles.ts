@@ -1,3 +1,7 @@
+import { BorderImage } from "../components/icons/BorderImage";
+import { BorderImagePixelated } from "../components/icons/BorderImagePixelated";
+import { PixelatedBorderImage } from "../components/icons/PixelatedBorderImage";
+
 import { generatePixelBorderPath } from "../utils/ui";
 
 import colors from "./colors";
@@ -11,11 +15,12 @@ export const styles = {
       color: "neon.200",
       letterSpacing: "0.04em",
       WebkitTapHighlightColor: "transparent",
-      "scrollbar-width": "none",
+      "scrollbar-width": "none"
     },
     "&::-webkit-scrollbar": {
       display: "none",
     },
+
   },
 };
 
@@ -27,6 +32,9 @@ export const cardStyle = {
   borderStyle: "solid",
   borderImageSlice: "6",
   borderImageWidth: "6px",
+  borderImageSource: `url("data:image/svg+xml,${BorderImage({
+    color: colors.neon["600"].toString(),
+  })}")`,
 };
 
 // use clipPath to "cut" corners
@@ -71,6 +79,23 @@ export const cardPixelatedStyleOutset = ({
   borderImageWidth: `${borderImageWidth}px`,
   borderImageOutset: `${borderImageWidth}px`,
   borderImageSlice: 7,
+
+  borderImageSource: `url("data:image/svg+xml,${BorderImagePixelated({
+    color,
+  })}")`,
+
+  _hover: {
+    borderImageSource: `url("data:image/svg+xml,${BorderImagePixelated({
+      color,
+    })}")`,
+  },
+  _active: {
+    top: 0,
+    left: 0,
+    borderImageSource: `url("data:image/svg+xml,${BorderImagePixelated({
+      color,
+    })}")`,
+  },
 });
 
 export const headerStyles = {
@@ -80,15 +105,25 @@ export const headerStyles = {
   borderImageSlice: "8",
   borderImageWidth: "12px",
   borderRadius: ["16px", "0"],
+  borderImageSource: [
+    `url("data:image/svg+xml,${PixelatedBorderImage({
+      color: colors.neon["700"].toString(),
+    })}")`, 'none'
+  ],
   clipPath: ["none", `polygon(${generatePixelBorderPath()})`],
-};
+}
 
 export const headerButtonStyles = {
   ...headerStyles,
   _hover: {
     bg: "neon.600",
+    borderImageSource: [
+      `url("data:image/svg+xml,${PixelatedBorderImage({
+        color: colors.neon["600"].toString(),
+      })}")`, 'none'
+    ]
   },
-};
+}
 
 //layer styles
 export const layerStyles = {
