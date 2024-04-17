@@ -1,4 +1,4 @@
-use ryo_pvp::models::{utils::{TwoZero, TwoTrait}};
+use ryo_pvp::models::{utils::{TwoTrait}};
 use starknet::ContractAddress;
 
 #[derive(Model, Copy, Drop, Print, Serde, SerdeLen)]
@@ -9,51 +9,44 @@ struct CommitHash {
     hustler_id: u128,
     hash: felt252,
 }
-#[generate_trait]
-impl CommitHashImpl of CommitHashTrait {
-    fn check_hash<T, +HashTrait<T>>(self: CommitHash, other: T, salt: felt252) -> bool {
-        other.get_hash(salt) == self.hash
-    }
-}
-
 
 trait HashTrait<T> {
     fn get_hash(self: T, salt: felt252) -> felt252;
 }
+
 #[derive(Copy, Drop, Print)]
 struct TwoCommits {
+    game_id: u128,
     a: felt252,
     b: felt252,
     hustler_a: u128,
     hustler_b: u128,
 }
 
-impl TwoCommitsZeroImpl of TwoZero<TwoCommits> {
-    fn is_non_zero(self: TwoCommits) -> bool {
-        self.a.is_non_zero() && self.b.is_non_zero()
-    }
-    fn is_zero(self: TwoCommits) -> bool {
-        self.a.is_zero() && self.b.is_zero()
-    }
-}
-
 
 impl TwoCommitsImpl of TwoTrait<TwoCommits, CommitHash> {
     fn create(a: CommitHash, b: CommitHash) -> TwoCommits {
-        TwoCommits { a: a.hash, b: b.hash, hustler_a: a.hustler_id, hustler_b: b.hustler_id, }
+        TwoCommits {
+            game_id: a.game_id,
+            a: a.hash,
+            b: b.hash,
+            hustler_a: a.hustler_id,
+            hustler_b: b.hustler_id,
+        }
     }
     fn has_init(self: TwoCommits, hustler_id: u128) -> bool {
-        self.get::<felt252>(hustler_id).is_non_zero()
+        let commit: CommitHash = self.get(hustler_id);
+        commit.hash.is_non_zero()
     }
     fn both_init(self: TwoCommits) -> bool {
         self.a.is_non_zero() && self.b.is_non_zero()
     }
-    fn get<felt252>(self: TwoCommits, hustler_id: u128) -> felt252 {
+    fn get(self: TwoCommits, hustler_id: u128) -> CommitHash {
         if hustler_id == self.hustler_a {
-            return self.a;
+            return CommitHash { game_id: self.game_id, hustler_id: self.hustler_a, hash: self.a };
         }
         if hustler_id == self.hustler_b {
-            return self.b;
+            return CommitHash { game_id: self.game_id, hustler_id: self.hustler_b, hash: self.b };
         }
         panic!("Hustler not in game")
     }
@@ -66,3 +59,4 @@ impl TwoCommitsImpl of TwoTrait<TwoCommits, CommitHash> {
         }
     }
 }
+

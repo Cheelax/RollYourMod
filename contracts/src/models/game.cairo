@@ -1,7 +1,7 @@
 use starknet::{ContractAddress};
 use ryo_pvp::models::{drugs::Drugs, commits::HashTrait, map::Vec2, utils::TwoTrait};
 
-#[derive(Model, Copy, Drop, Serde)]
+#[derive(Model, Copy, Drop, Serde, SerdeLen)]
 struct TwoPlayerGame {
     #[key]
     game_id: u128,
@@ -11,8 +11,7 @@ struct TwoPlayerGame {
     hustler_b: u128,
 }
 
-
-#[derive(Model, Copy, Drop, Serde)]
+#[derive(Model, Copy, Drop, Serde, SerdeLen)]
 struct Move {
     #[key]
     game_id: u128,
@@ -30,6 +29,7 @@ impl MoveHashImpl of HashTrait<Move> {
     }
 }
 
+#[derive(Copy, Drop, Serde)]
 struct TwoMoves {
     a: Move,
     b: Move,
@@ -40,12 +40,13 @@ impl TwoMoveImpl of TwoTrait<TwoMoves, Move> {
         TwoMoves { a, b }
     }
     fn has_init(self: TwoMoves, hustler_id: u128) -> bool {
-        self.get::<Move>(hustler_id).revealed
+        let move: Move = self.get(hustler_id);
+        move.revealed
     }
     fn both_init(self: TwoMoves) -> bool {
         self.a.revealed && self.b.revealed
     }
-    fn get<Move>(self: TwoMoves, hustler_id: u128) -> Move {
+    fn get(self: TwoMoves, hustler_id: u128) -> Move {
         if hustler_id == self.a.hustler_id {
             return self.a;
         }
@@ -61,7 +62,6 @@ impl TwoMoveImpl of TwoTrait<TwoMoves, Move> {
         if obj.hustler_id == self.b.hustler_id {
             self.b = obj;
         }
-        panic!("Move not in game")
     }
 }
 

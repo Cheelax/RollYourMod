@@ -1,4 +1,4 @@
-#[derive(Copy, Drop, Serde)]
+#[derive(Copy, Drop, Serde, Introspect)]
 struct Drugs {
     shrooms: u32,
     cocaine: u32,
