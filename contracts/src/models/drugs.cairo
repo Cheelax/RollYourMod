@@ -1,3 +1,6 @@
+use ryo_pvp::models::{utils::{TwoTrait}, commits::HashTrait};
+use core::pedersen::pedersen;
+
 #[derive(Copy, Drop, Serde, Introspect)]
 struct Drugs {
     shrooms: u32,
@@ -123,5 +126,14 @@ impl DrugsPartialOrd of PartialOrd<Drugs> {
             && lhs.cocaine > rhs.cocaine
             && lhs.ketamine > rhs.ketamine
             && lhs.speed > rhs.speed
+    }
+}
+
+impl DrugsHashImpl of HashTrait<Drugs> {
+    fn hash(self: Drugs, salt: felt252) -> felt252 {
+        let cocaine_pedersen = pedersen(self.shrooms.into(), self.cocaine.into());
+        let ketamine_pedersen = pedersen(cocaine_pedersen, self.ketamine.into());
+        let speed_pedersen = pedersen(ketamine_pedersen, self.speed.into());
+        pedersen(salt.into(), speed_pedersen.into())
     }
 }
