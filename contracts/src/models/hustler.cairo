@@ -1,6 +1,7 @@
 use starknet::ContractAddress;
 use ryo_pvp::models::{
-    utils::{TwoZero, AB}, game::{Drugs}, map::{get_start_position, Vec2}, commits::HashTrait
+    utils::{TwoZero, AB, TwoTrait}, game::{Drugs}, map::{get_start_position, Vec2},
+    commits::HashTrait, items::Items,
 };
 
 #[derive(Model, Copy, Drop, Serde)]
@@ -9,12 +10,9 @@ struct Hustler {
     game_id: u128,
     #[key]
     hustler_id: u128,
-    player_id: ContractAddress,
-    weapon: u8,
-    clothes: u8,
-    speed: u8,
-    bag: u8,
+    items: Items,
     drugs: felt252,
+    revealed: bool,
 }
 
 #[derive(Model, Copy, Drop, Serde)]
@@ -25,7 +23,8 @@ struct HustlerState {
     hustler_id: u128,
     position: Vec2,
     health: u8,
-    drugs: Drugs,
+    system: Drugs,
+    consumed: Drugs,
 }
 
 #[generate_trait]
@@ -36,7 +35,8 @@ impl HustlerStateImpl of HashStateTrait {
             hustler_id,
             position: get_start_position(player),
             health: 255,
-            drugs: Zeroable::<Drugs>::zero(),
+            system: Zeroable::<Drugs>::zero(),
+            consumed: Zeroable::<Drugs>::zero(),
         }
     }
 }
@@ -52,22 +52,38 @@ struct TwoHustlers {
     b: Hustler,
 }
 
-
-#[generate_trait]
-impl HustlerImpl of HustlerTrait {
-    fn has_init(self: Hustler) -> bool {
-        self.player_id.is_zero()
+impl TwoHustlerImpl of TwoTrait<TwoHustlers, Hustler> {
+    fn create(a: Hustler, b: Hustler) -> TwoHustlers {
+        TwoHustlers { a, b }
     }
-    fn is_owner(self: Hustler, owner: ContractAddress) -> bool {
-        self.player_id == owner
+    fn has_init(self: TwoHustlers, hustler_id: u128) -> bool {
+        self.get::<Hustler>(hustler_id).revealed
+    }
+    fn both_init(self: TwoHustlers) -> bool {
+        self.a.revealed && self.b.revealed
+    }
+    fn get<Hustler>(self: TwoHustlers, hustler_id: u128) -> Hustler {
+        if hustler_id == self.a.hustler_id {
+            return self.a;
+        }
+        if hustler_id == self.b.hustler_id {
+            return self.b;
+        }
+        panic!("Hustler not in game")
+    }
+    fn set(ref self: TwoHustlers, obj: Hustler) {
+        if obj.hustler_id == self.a.hustler_id {
+            self.a = obj;
+        }
+        if obj.hustler_id == self.b.hustler_id {
+            self.b = obj;
+        }
+        panic!("Move not in game")
     }
 }
 
-impl TwoHustlersZeroImpl of TwoZero<TwoHustlers> {
-    fn is_zero(self: TwoHustlers) -> bool {
-        self.a.player_id.is_zero() && self.b.player_id.is_zero()
-    }
-    fn is_non_zero(self: TwoHustlers) -> bool {
-        self.a.player_id.is_non_zero() && self.b.player_id.is_non_zero()
-    }
+
+struct TwoHustlersState {
+    a: Hustler,
+    b: Hustler,
 }

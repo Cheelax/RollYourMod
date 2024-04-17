@@ -9,9 +9,11 @@ mod models {
     mod drugs;
     mod map;
     mod commits;
+    mod items;
 }
 
 mod systems {
     mod game;
 }
+mod mechanics;
 

@@ -1,4 +1,4 @@
-use ryo_pvp::models::{utils::{TwoZero, AB}};
+use ryo_pvp::models::{utils::{TwoZero, TwoTrait}};
 use starknet::ContractAddress;
 
 #[derive(Model, Copy, Drop, Print, Serde, SerdeLen)]
@@ -24,8 +24,8 @@ trait HashTrait<T> {
 struct TwoCommits {
     a: felt252,
     b: felt252,
-    player_a: ContractAddress,
-    player_b: ContractAddress,
+    hustler_a: u128,
+    hustler_b: u128,
 }
 
 impl TwoCommitsZeroImpl of TwoZero<TwoCommits> {
@@ -38,17 +38,31 @@ impl TwoCommitsZeroImpl of TwoZero<TwoCommits> {
 }
 
 
-#[generate_trait]
-impl TwoCommitsImpl of TwoCommitsTrait {
-    fn create(a: CommitHash, b: CommitHash)
-    fn is_non_zero(self: TwoCommits) -> bool {
+impl TwoCommitsImpl of TwoTrait<TwoCommits, CommitHash> {
+    fn create(a: CommitHash, b: CommitHash) -> TwoCommits {
+        TwoCommits { a: a.hash, b: b.hash, hustler_a: a.hustler_id, hustler_b: b.hustler_id, }
+    }
+    fn has_init(self: TwoCommits, hustler_id: u128) -> bool {
+        self.get::<felt252>(hustler_id).is_non_zero()
+    }
+    fn both_init(self: TwoCommits) -> bool {
         self.a.is_non_zero() && self.b.is_non_zero()
     }
-    fn get_hash(self: TwoCommits, hustler: AB) -> felt252 {
-        match hustler {
-            AB::A => self.a,
-            AB::B => self.b,
+    fn get<felt252>(self: TwoCommits, hustler_id: u128) -> felt252 {
+        if hustler_id == self.hustler_a {
+            return self.a;
+        }
+        if hustler_id == self.hustler_b {
+            return self.b;
+        }
+        panic!("Hustler not in game")
+    }
+    fn set(ref self: TwoCommits, obj: CommitHash) {
+        if obj.hustler_id == self.hustler_a {
+            self.a = obj.hash;
+        }
+        if obj.hustler_id == self.hustler_b {
+            self.b = obj.hash;
         }
     }
-    fn get_hustler_hash(self: TwoCommits, hustler_id: u128) -> felt252 {}
 }
